@@ -14,6 +14,9 @@ library(zipfR)
 project_data <- read.delim("text/DrJekyllAndMrHyde.txt")
 project_data
 
+project_data
+
+
 # Check numrows
 nrow(project_data)
 
@@ -26,7 +29,7 @@ head(project_data)
 # Contains all files in working directory 
 dataCorpus <- VCorpus(DirSource("text/",ignore.case = TRUE,mode="text"))
 dataCorpus
-inspect(dataCorpus)
+inspect(dataCorpus
 str(dataCorpus)
 dataCorpus[1]
 
@@ -95,6 +98,10 @@ termFreq1
 
 termFreq1Sub <- subset(termFreq1, termFreq1 >= 1)
 termFreq1Sub
+
+termFreq1DF <- as.data.frame(names(termFreq1),freq=termFreq1)
+termFreq1DF
+
 
 
 

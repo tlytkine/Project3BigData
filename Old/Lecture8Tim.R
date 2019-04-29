@@ -23,7 +23,6 @@ nrow(bookText)
 # Check head
 head(bookText)
 
-
 # Create VCorpus of book with chapters separated out 
 bookCorpus <- VCorpus(DirSource("text/",ignore.case = TRUE,mode="text"))
 bookCorpus
@@ -41,8 +40,8 @@ chapter2 <- bookCorpus[3]
 chapter3 <- bookCorpus[4]
 chapter4 <- bookCorpus[5]
 chapter5 <- bookCorpus[6]
-chapter6 <- bookCorpus[9]
-chapter9 <- bookCorpus[8]
+chapter6 <- bookCorpus[7]
+chapter7 <- bookCorpus[8]
 chapter8 <- bookCorpus[9]
 chapter9 <- bookCorpus[10]
 chapter10 <- bookCorpus[11]
@@ -158,6 +157,7 @@ sparseTDM
 
 # Finding Informative Words 
 inspect(chapter1)
+
 # Exercise for students: given the list of interesting words in an article, determine how to 
 # find the position of each word in the original article,
 # Then, determine how to compute the distance between each pair of words. (distMatrix)
@@ -235,8 +235,8 @@ clChapter2 <- bookCorpus$content[3][[1]][["content"]]
 clChapter3 <- bookCorpus$content[4][[1]][["content"]]
 clChapter4 <- bookCorpus$content[5][[1]][["content"]]
 clChapter5 <- bookCorpus$content[6][[1]][["content"]]
-clChapter6 <- bookCorpus$content[9][[1]][["content"]]
-clChapter9 <- bookCorpus$content[8][[1]][["content"]]
+clChapter6 <- bookCorpus$content[7][[1]][["content"]]
+clChapter7 <- bookCorpus$content[8][[1]][["content"]]
 clChapter8 <- bookCorpus$content[9][[1]][["content"]]
 clChapter9 <- bookCorpus$content[10][[1]][["content"]]
 clChapter10 <- bookCorpus$content[11][[1]][["content"]]
@@ -338,16 +338,16 @@ chapter6RowSum
 chapter6ColSum <- colSums(clChapter6Sent)
 chapter6ColSum
 
-# Chapter 9
-clChapter9Sent <- syuzhet::get_nrc_sentiment(clChapter9)
-clChapter9Sent
-head(clChapter9Sent)
+# Chapter 7
+clChapter7Sent <- syuzhet::get_nrc_sentiment(clChapter7)
+clChapter7Sent
+head(clChapter7Sent)
 # Row sum of sentiments 
-chapter9RowSum <- rowSums(clChapter9Sent)
-chapter9RowSum
+chapter7RowSum <- rowSums(clChapter7Sent)
+chapter7RowSum
 # Column sum of sentiments 
-chapter9ColSum <- colSums(clChapter9Sent)
-chapter9ColSum
+chapter7ColSum <- colSums(clChapter7Sent)
+chapter7ColSum
 
 # Chapter 8
 clChapter8Sent <- syuzhet::get_nrc_sentiment(clChapter8)
@@ -394,8 +394,23 @@ EndColSum <- colSums(clEndSent)
 EndColSum
 
 
+
 # Text Weighting (Document Frequency of Words)
-# SLIDE 60 lecture 8, nearly done 
-# bookFreq <- docfreq()
+ch1DFM <- dfm(clChapter1Tokens)
+ch1Freq <- docfreq(ch1DFM)
+ch1Freq
+
+
+ch1weights <- dfm_weight(ch1DFM,scheme="prop")
+str(ch1weights)
+
+
+ch1TFIDF <- dfm_tfidf(ch1DFM,scheme_tf="count",scheme_df="inverse")
+str(ch1TFIDF)
+ch1TFIDF@i
+
+
+
+
 
 

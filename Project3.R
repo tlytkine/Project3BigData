@@ -12,17 +12,20 @@ library(textreuse)
 library(quanteda)
 library(stringi)
 library(syuzhet)
+library(corpus)
+library(openNLP)
+library(readr)
+library(stringr)
 
 
 # Load text file (entire book)
-bookText <- read.delim("DrJekyllAndMrHyde.txt")
-bookText
-
+lines <- read_lines("DrJekyllAndMrHyde.txt", skip = 0, n_max = -1L)
+lines
 # Check numrows
-nrow(bookText)
+nrow(lines)
 
 # Check head
-head(bookText)
+head(lines)
 
 # Create VCorpus of book with chapters separated out 
 bookCorpus <- VCorpus(DirSource("text/",ignore.case = TRUE,mode="text"))
@@ -33,6 +36,56 @@ inspect(bookCorpus)
 
 # Check structure of chapter corpus
 str(bookCorpus)
+
+# Function to convert text to sentences 
+convert_text_to_sentences <- function(text, lang = "en") {
+  # Function to compute sentence annotations using the Apache OpenNLP Maxent sentence detector employing the default model for language 'en'. 
+  sentence_token_annotator <- Maxent_Sent_Token_Annotator(language = lang)
+  
+  # Convert text to class String from package NLP
+  text <- as.String(text)
+  
+  # Sentence boundaries in text
+  sentence.boundaries <- annotate(text, sentence_token_annotator)
+  
+  # Extract sentences
+  sentences <- text[sentence.boundaries]
+  
+  # return sentences
+  return(sentences)
+}
+sentences <- convert_text_to_sentences(lines)
+str(sentences)
+sentences[1]
+summary(sentences)
+str_length(sentences[2])
+
+# Sort array by number of characters 
+sentences$numChar <- nchar(sentences)
+sentences$numChar
+sortedSentences <- sentences[order(-sentences$numChar)]
+
+# Find 10 longest sentences
+tenLongest <- sortedSentences[1:10]
+tenLongest
+
+tenLongest <- tenLongest[order(-nwords(tenLongest))]
+
+# Function to count number of words 
+nwords <- function(string, pseudo=F){
+  ifelse( pseudo, 
+          pattern <- "\\S+", 
+          pattern <- "[[:alpha:]]+" 
+  )
+  str_count(string, pattern)
+}
+
+# Find number of words in each sentence (add to report)
+for(i in 1:10){ 
+  print(nwords(tenLongest[i]))
+  sprintf("\n")
+}
+
 
 # Extract book from corpus 
 intro <- bookCorpus[1]
@@ -47,6 +100,10 @@ chapter8 <- bookCorpus[9]
 chapter9 <- bookCorpus[10]
 chapter10 <- bookCorpus[11]
 end <- bookCorpus[12]
+
+
+
+
 
 
 
@@ -243,6 +300,101 @@ clChapter8 <- bookCorpus$content[9][[1]][["content"]]
 clChapter9 <- bookCorpus$content[10][[1]][["content"]]
 clChapter10 <- bookCorpus$content[11][[1]][["content"]]
 clEnd <- bookCorpus$content[12][[1]][["content"]]
+
+# get distances
+# Chapter 1 
+x1 <- VCorpus(DirSource("text/chapter1/",ignore.case = TRUE,mode="text"))
+x1TDM <- TermDocumentMatrix(x1)
+x1TDM
+ch1Dist <- dist(x1TDM)
+# Chapter 2 
+x2 <- VCorpus(DirSource("text/chapter2/",ignore.case = TRUE,mode="text"))
+x2TDM <- TermDocumentMatrix(x2)
+x2TDM
+ch2Dist <- dist(x2TDM)
+# Chapter 3 
+x3 <- VCorpus(DirSource("text/chapter3/",ignore.case = TRUE,mode="text"))
+x3TDM <- TermDocumentMatrix(x3)
+x3TDM
+ch3Dist <- dist(x3TDM)
+# Chapter 4 
+x4 <- VCorpus(DirSource("text/chapter4/",ignore.case = TRUE,mode="text"))
+x4TDM <- TermDocumentMatrix(x4)
+x4TDM
+ch4Dist <- dist(x4TDM)
+# Chapter 5 
+x5 <- VCorpus(DirSource("text/chapter5/",ignore.case = TRUE,mode="text"))
+x5TDM <- TermDocumentMatrix(x5)
+x5TDM
+ch5Dist <- dist(x5TDM)
+# Chapter 6 
+x6 <- VCorpus(DirSource("text/chapter6/",ignore.case = TRUE,mode="text"))
+x6TDM <- TermDocumentMatrix(x6)
+x6TDM
+ch6Dist <- dist(x6TDM)
+# Chapter 7
+x7 <- VCorpus(DirSource("text/chapter7/",ignore.case = TRUE,mode="text"))
+x7TDM <- TermDocumentMatrix(x7)
+x7TDM
+ch7Dist <- dist(x7TDM)
+# Chapter 8
+x8 <- VCorpus(DirSource("text/chapter8/",ignore.case = TRUE,mode="text"))
+x8TDM <- TermDocumentMatrix(x8)
+x8TDM
+ch8Dist <- dist(x8TDM)
+# Chapter 9
+x9 <- VCorpus(DirSource("text/chapter9/",ignore.case = TRUE,mode="text"))
+x9TDM <- TermDocumentMatrix(x9)
+x9TDM
+ch9Dist <- dist(x9TDM)
+# Chapter 10
+x10 <- VCorpus(DirSource("text/chapter10/",ignore.case = TRUE,mode="text"))
+x10TDM <- TermDocumentMatrix(x10)
+x10TDM
+ch10Dist <- dist(x10TDM)
+
+
+# Chapter 1 
+fitCH1 <- hclust(ch1Dist,method="ward.D2")
+fitCH1
+plot(fitCH1)
+# Chapter 2
+fitCH2 <- hclust(ch2Dist,method="ward.D2")
+fitCH2
+plot(fitCH2)
+# Chapter 3 
+fitCH3 <- hclust(ch3Dist,method="ward.D2")
+fitCH3
+plot(fitCH3)
+# Chapter 4 
+fitCH4 <- hclust(ch4Dist,method="ward.D2")
+fitCH4
+plot(fitCH4)
+# Chapter 5 
+fitCH5 <- hclust(ch5Dist,method="ward.D2")
+fitCH5
+plot(fitCH5)
+# Chapter 6 
+fitCH6 <- hclust(ch6Dist,method="ward.D2")
+fitCH6
+plot(fitCH6)
+# Chapter 7 
+fitCH7 <- hclust(ch7Dist,method="ward.D2")
+fitCH7
+plot(fitCH7)
+# Chapter 8 
+fitCH8 <- hclust(ch8Dist,method="ward.D2")
+fitCH8
+plot(fitCH8)
+# Chapter 9 
+fitCH9 <- hclust(ch9Dist,method="ward.D2")
+fitCH9
+plot(fitCH9)
+# Chapter 10 
+fitCH10 <- hclust(ch10Dist,method="ward.D2")
+fitCH10
+plot(fitCH10)
+
 # Ex: Chapter1 extracted 
 clChapter1
 # Extract tokens from Chapter 1 
@@ -401,7 +553,6 @@ EndColSum
 ch1DFM <- dfm(clChapter1Tokens)
 ch1Freq <- docfreq(ch1DFM)
 ch1Freq
-
 
 ch1weights <- dfm_weight(ch1DFM,scheme="prop")
 str(ch1weights)

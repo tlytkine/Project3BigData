@@ -8,7 +8,6 @@ library(rJava)
 library(wordnet)
 library(tm)
 library(zipfR)
-library(textreuse)
 library(quanteda)
 library(stringi)
 library(syuzhet)
@@ -353,7 +352,7 @@ x10TDM <- TermDocumentMatrix(x10)
 x10TDM
 ch10Dist <- dist(x10TDM)
 
-
+# Dendrograms 
 # Chapter 1 
 fitCH1 <- hclust(ch1Dist,method="ward.D2")
 fitCH1
@@ -563,8 +562,7 @@ str(ch1TFIDF)
 ch1TFIDF@i
 
 # Word Cloud for Chapter 1
-dtm <- TermDocumentMatrix(chapter1)
-ch1 <- as.matrix(dtm)
+ch1 <- as.matrix(x1TDM)
 word1.freq <- sort(rowSums(ch1),decreasing = T)
 word1.freq
 pal1 <- brewer.pal(9,"BuGn")
@@ -572,17 +570,15 @@ pal1 <- pal1[-(1:4)]
 wordcloud(words = names(word1.freq),freq=word1.freq,min.freq=3,random.order=F,colors=pal1)
 
 # Word Cloud for Chapter 2
-dtm2 <- TermDocumentMatrix(chapter2)
-ch2 <- as.matrix(dtm2)
+ch2 <- as.matrix(x2TDM)
 word2.freq <- sort(rowSums(ch2),decreasing = T)
 word2.freq
-pal2 <- brewer.pal2(9,"BuGn")
+pal2 <- brewer.pal(9,"BuGn")
 pal2 <- pal[-(1:4)]
 wordcloud(words = names(word2.freq),freq=word2.freq,min.freq=3,random.order=F,colors=pal2)
 
 # Word Cloud for Chapter 3
-dtm3 <- TermDocumentMatrix(chapter3)
-ch3 <- as.matrix(dtm3)
+ch3 <- as.matrix(x3TDM)
 word3.freq <- sort(rowSums(ch3),decreasing = T)
 word3.freq
 pal3 <- brewer.pal(9,"BuGn")
@@ -591,8 +587,7 @@ wordcloud(words = names(word3.freq),freq=word3.freq,min.freq=3,random.order=F,co
 
 
 # Word Cloud for Chapter 4
-dtm4 <- TermDocumentMatrix(chapter4)
-ch4 <- as.matrix(dtm4)
+ch4 <- as.matrix(x4TDM)
 word4.freq <- sort(rowSums(ch4),decreasing = T)
 word4.freq
 pal4 <- brewer.pal(9,"BuGn")
@@ -601,8 +596,7 @@ wordcloud(words = names(word4.freq),freq=word4.freq,min.freq=3,random.order=F,co
 
 
 # Word Cloud for Chapter 5
-dtm5 <- TermDocumentMatrix(chapter5)
-ch5 <- as.matrix(dtm5)
+ch5 <- as.matrix(x5TDM)
 word5.freq <- sort(rowSums(ch5),decreasing = T)
 word5.freq
 pal5 <- brewer.pal(9,"BuGn")
@@ -611,8 +605,7 @@ wordcloud(words = names(word5.freq),freq=word5.freq,min.freq=3,random.order=F,co
 
 
 # Word Cloud for Chapter 6
-dtm6 <- TermDocumentMatrix(chapter6)
-ch6 <- as.matrix(dtm5)
+ch6 <- as.matrix(x6TDM)
 word6.freq <- sort(rowSums(ch6),decreasing = T)
 word6.freq
 pal6 <- brewer.pal(9,"BuGn")
@@ -620,8 +613,7 @@ pal6 <- pal6[-(1:4)]
 wordcloud(words = names(word6.freq),freq=word6.freq,min.freq=3,random.order=F,colors=pal6)
 
 # Word Cloud for Chapter 7
-dtm7 <- TermDocumentMatrix(chapter7)
-ch7 <- as.matrix(dtm7)
+ch7 <- as.matrix(x7TDM)
 word7.freq <- sort(rowSums(ch7),decreasing = T)
 word7.freq
 pal7 <- brewer.pal(9,"BuGn")
@@ -629,8 +621,7 @@ pal7 <- pal7[-(1:4)]
 wordcloud(words = names(word7.freq),freq=word7.freq,min.freq=3,random.order=F,colors=pal7)
 
 # Word Cloud for Chapter 8
-dtm8 <- TermDocumentMatrix(chapter8)
-ch8 <- as.matrix(dtm8)
+ch8 <- as.matrix(x8TDM)
 word8.freq <- sort(rowSums(ch8),decreasing = T)
 word8.freq
 pal8 <- brewer.pal(9,"BuGn")
@@ -638,8 +629,7 @@ pal8 <- pal8[-(1:4)]
 wordcloud(words = names(word8.freq),freq=word8.freq,min.freq=3,random.order=F,colors=pal8)
 
 # Word Cloud for Chapter 9
-dtm9 <- TermDocumentMatrix(chapter9)
-ch9 <- as.matrix(dtm9)
+ch9 <- as.matrix(x9TDM)
 word9.freq <- sort(rowSums(ch9),decreasing = T)
 word9.freq
 pal9 <- brewer.pal(9,"BuGn")
@@ -647,10 +637,10 @@ pal9 <- pal9[-(1:4)]
 wordcloud(words = names(word9.freq),freq=word9.freq,min.freq=3,random.order=F,colors=pal9)
 
 # Word Cloud for Chapter 10
-dtm10 <- TermDocumentMatrix(chapter10)
-ch10 <- as.matrix(dtm10)
+ch10 <- as.matrix(x10TDM)
 word10.freq <- sort(rowSums(ch10),decreasing = T)
 word10.freq
 pal10 <- brewer.pal(9,"BuGn")
 pal10 <- pal10[-(1:4)]
 wordcloud(words = names(word10.freq),freq=word10.freq,min.freq=3,random.order=F,colors=pal10)
+

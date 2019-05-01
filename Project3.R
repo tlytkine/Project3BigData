@@ -68,7 +68,10 @@ sortedSentences <- sentences[order(-sentences$numChar)]
 tenLongest <- sortedSentences[1:10]
 tenLongest
 
-tenLongest <- tenLongest[order(-nwords(tenLongest))]
+tenLongest <- tenLongest[order(nwords(tenLongest))]
+tenLongest
+
+
 
 # Function to count number of words 
 nwords <- function(string, pseudo=F){
@@ -643,4 +646,614 @@ word10.freq
 pal10 <- brewer.pal(9,"BuGn")
 pal10 <- pal10[-(1:4)]
 wordcloud(words = names(word10.freq),freq=word10.freq,min.freq=3,random.order=F,colors=pal10)
+
+
+
+# 1d. Prior to removing the punctuation, find the longest word and longest sentences 
+# in each chapter. Print a table of the length of the shortest and longest sentences
+# in each chapter 
+# Chapter 1 
+# Get lines from Chapter 1 
+ch1Lines <- read_lines("text/Chapter01.txt", skip = 0, n_max = -1L)
+# Convert text to sentences 
+ch1Sentences <- convert_text_to_sentences(ch1Lines)
+# Sort array by number of characters 
+ch1Sentences$numChar <- nchar(ch1Sentences)
+ch1SortedSentences <- sentences[order(ch1Sentences$numChar)]
+ch1SortedSentences
+# Find longest sentence 
+ch1Longest <-ch1SortedSentences[1]
+ch1Longest
+# Length of longest sentence
+str_length(ch1Longest)
+# Number of words in longest sentence 
+nwords(ch1Longest)
+# Find shortest Sentence 
+ch1Shortest <- ch1SortedSentences[108]
+ch1Shortest
+# Length of shortest sentence 
+str_length(ch1Shortest)
+# Number of words in shortest sentence 
+nwords(ch1Shortest)
+# Longest word
+# Extract words 
+x1DTM <- DocumentTermMatrix(x1)
+ch1Words <- x1DTM$dimnames$Terms
+ch1NumWords <- length(x1DTM$dimnames$Terms)
+maxWordLength <- 0
+maxWordCh1 <- "max"
+
+
+for(i in 1:ch1NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch1Words[i]))
+  if((nchar(ch1Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch1Words[i])
+    maxWordCh1 <- ch1Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh1)
+
+# Chapter 2
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 2 
+ch2Lines <- read_lines("text/Chapter02.txt", skip = 0, n_max = -1L)
+# Convert text to sentences 
+ch2Sentences <- convert_text_to_sentences(ch2Lines)
+str(ch2Sentences)
+# Sort array by number of characters 
+ch2Sentences$numChar <- nchar(ch2Sentences)
+ch2Sentences$numChar
+ch2SortedSentences <- sentences[order(-ch2Sentences$numChar)]
+ch2SortedSentences
+# Find longest sentence 
+ch2Longest <-ch2SortedSentences[1]
+ch2Longest
+
+# Length of longest sentence
+str_length(ch2Longest)
+
+# Number of words in longest sentence 
+nwords(ch2Longest)
+
+# Find shortest Sentence 
+ch2Shortest <- ch2SortedSentences[136]
+ch2Shortest
+
+# Length of shortest sentence 
+str_length(ch2Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch2Shortest)
+
+
+# Longest word
+# Extract words 
+x2DTM <- DocumentTermMatrix(x2)
+ch2Words <- x2DTM$dimnames$Terms
+ch2Words
+
+ch2NumWords <- length(x2DTM$dimnames$Terms)
+ch2NumWords 
+
+maxWordLength2 <- 0
+maxWordCh2 <- "max"
+
+
+for(i in 1:ch2NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch2Words[i]))
+  if((nchar(ch2Words[i]) > maxWordLength2)){
+    maxWordLength2 <- nchar(ch2Words[i])
+    maxWordCh2 <- ch2Words[i]
+  }
+}
+print(maxWordLength2)
+print(maxWordCh2)
+
+# Chapter 3
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 3
+ch3Lines <- read_lines("text/Chapter03.txt", skip = 0, n_max = -1L)
+ch3Lines
+# Convert text to sentences 
+ch3Sentences <- convert_text_to_sentences(ch3Lines)
+str(ch3Sentences)
+# Sort array by number of characters 
+ch3Sentences$numChar <- nchar(ch3Sentences)
+ch3Sentences$numChar
+ch3SortedSentences <- sentences[order(ch3Sentences$numChar)]
+# Find longest sentence 
+ch3Longest <-ch1SortedSentences[1]
+ch3Longest
+
+# Length of longest sentence
+str_length(ch3Longest)
+
+# Number of words in longest sentence 
+nwords(ch3Longest)
+
+# Find shortest Sentence 
+ch3Shortest <- ch3SortedSentences[108]
+ch3Shortest
+
+# Length of shortest sentence 
+str_length(ch3Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch3Shortest)
+
+
+# Longest word
+# Extract words 
+x3DTM <- DocumentTermMatrix(x3)
+ch3Words <- x3DTM$dimnames$Terms
+ch3Words
+
+ch3NumWords <- length(x3DTM$dimnames$Terms)
+ch3NumWords 
+
+maxWordLength3 <- 0
+maxWordCh3 <- "max"
+
+
+for(i in 1:ch3NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch3Words[i]))
+  if((nchar(ch3Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch3Words[i])
+    maxWordCh3 <- ch3Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh3)
+
+# Chapter 4
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 4 
+ch4Lines <- read_lines("text/Chapter04.txt", skip = 0, n_max = -1L)
+ch4Lines
+# Convert text to sentences 
+ch4Sentences <- convert_text_to_sentences(ch4Lines)
+str(ch4Sentences)
+# Sort array by number of characters 
+ch4Sentences$numChar <- nchar(ch4Sentences)
+ch4Sentences$numChar
+ch4SortedSentences <- sentences[order(ch4Sentences$numChar)]
+# Find longest sentence 
+ch4Longest <-ch1SortedSentences[4]
+ch4Longest
+
+# Length of longest sentence
+str_length(ch4Longest)
+
+# Number of words in longest sentence 
+nwords(ch4Longest)
+
+# Find shortest Sentence 
+ch4Shortest <- ch4SortedSentences[108]
+ch4Shortest
+
+# Length of shortest sentence 
+str_length(ch4Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch4Shortest)
+
+
+# Longest word
+# Extract words 
+x4DTM <- DocumentTermMatrix(x4)
+ch4Words <- x4DTM$dimnames$Terms
+ch4Words
+
+ch4NumWords <- length(x4DTM$dimnames$Terms)
+ch4NumWords 
+
+maxWordLength4 <- 0
+maxWordCh4 <- "max"
+
+
+for(i in 1:ch4NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch4Words[i]))
+  if((nchar(ch4Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch4Words[i])
+    maxWordCh4 <- ch4Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh4)
+
+# Chapter 5
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 5 
+ch5Lines <- read_lines("text/Chapter05.txt", skip = 0, n_max = -1L)
+ch5Lines
+# Convert text to sentences 
+ch5Sentences <- convert_text_to_sentences(ch5Lines)
+str(ch5Sentences)
+# Sort array by number of characters 
+ch5Sentences$numChar <- nchar(ch5Sentences)
+ch5Sentences$numChar
+ch5SortedSentences <- sentences[order(ch5Sentences$numChar)]
+# Find longest sentence 
+ch5Longest <-ch1SortedSentences[5]
+ch5Longest
+
+# Length of longest sentence
+str_length(ch5Longest)
+
+# Number of words in longest sentence 
+nwords(ch5Longest)
+
+# Find shortest Sentence 
+ch5Shortest <- ch5SortedSentences[108]
+ch5Shortest
+
+# Length of shortest sentence 
+str_length(ch5Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch5Shortest)
+
+
+# Longest word
+# Extract words 
+x5DTM <- DocumentTermMatrix(x5)
+ch5Words <- x5DTM$dimnames$Terms
+ch5Words
+
+ch5NumWords <- length(x5DTM$dimnames$Terms)
+ch5NumWords 
+
+maxWordLength5 <- 0
+maxWordCh5 <- "max"
+
+
+for(i in 1:ch5NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch5Words[i]))
+  if((nchar(ch5Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch5Words[i])
+    maxWordCh5 <- ch5Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh5)
+
+# Chapter 6
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 6 
+ch6Lines <- read_lines("text/Chapter06.txt", skip = 0, n_max = -1L)
+ch6Lines
+# Convert text to sentences 
+ch6Sentences <- convert_text_to_sentences(ch6Lines)
+str(ch6Sentences)
+# Sort array by number of characters 
+ch6Sentences$numChar <- nchar(ch6Sentences)
+ch6Sentences$numChar
+ch6SortedSentences <- sentences[order(ch6Sentences$numChar)]
+# Find longest sentence 
+ch6Longest <-ch1SortedSentences[6]
+ch6Longest
+
+# Length of longest sentence
+str_length(ch6Longest)
+
+# Number of words in longest sentence 
+nwords(ch6Longest)
+
+# Find shortest Sentence 
+ch6Shortest <- ch6SortedSentences[108]
+ch6Shortest
+
+# Length of shortest sentence 
+str_length(ch6Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch6Shortest)
+
+
+# Longest word
+# Extract words 
+x6DTM <- DocumentTermMatrix(x6)
+ch6Words <- x6DTM$dimnames$Terms
+ch6Words
+
+ch6NumWords <- length(x6DTM$dimnames$Terms)
+ch6NumWords 
+
+maxWordLength6 <- 0
+maxWordCh6 <- "max"
+
+
+for(i in 1:ch6NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch6Words[i]))
+  if((nchar(ch6Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch6Words[i])
+    maxWordCh6 <- ch6Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh6)
+
+# Chapter 7
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 7 
+ch7Lines <- read_lines("text/Chapter07.txt", skip = 0, n_max = -1L)
+ch7Lines
+# Convert text to sentences 
+ch7Sentences <- convert_text_to_sentences(ch7Lines)
+str(ch7Sentences)
+# Sort array by number of characters 
+ch7Sentences$numChar <- nchar(ch7Sentences)
+ch7Sentences$numChar
+ch7SortedSentences <- sentences[order(ch7Sentences$numChar)]
+# Find longest sentence 
+ch7Longest <-ch1SortedSentences[7]
+ch7Longest
+
+# Length of longest sentence
+str_length(ch7Longest)
+
+# Number of words in longest sentence 
+nwords(ch7Longest)
+
+# Find shortest Sentence 
+ch7Shortest <- ch7SortedSentences[108]
+ch7Shortest
+
+# Length of shortest sentence 
+str_length(ch7Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch7Shortest)
+
+
+# Longest word
+# Extract words 
+x7DTM <- DocumentTermMatrix(x7)
+ch7Words <- x7DTM$dimnames$Terms
+ch7Words
+
+ch7NumWords <- length(x7DTM$dimnames$Terms)
+ch7NumWords 
+
+maxWordLength7 <- 0
+maxWordCh7 <- "max"
+
+
+for(i in 1:ch7NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch7Words[i]))
+  if((nchar(ch7Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch7Words[i])
+    maxWordCh7 <- ch7Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh7)
+
+# Chapter 8
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 8 
+ch8Lines <- read_lines("text/Chapter08.txt", skip = 0, n_max = -1L)
+ch8Lines
+# Convert text to sentences 
+ch8Sentences <- convert_text_to_sentences(ch8Lines)
+str(ch8Sentences)
+# Sort array by number of characters 
+ch8Sentences$numChar <- nchar(ch8Sentences)
+ch8Sentences$numChar
+ch8SortedSentences <- sentences[order(ch8Sentences$numChar)]
+# Find longest sentence 
+ch8Longest <-ch1SortedSentences[8]
+ch8Longest
+
+# Length of longest sentence
+str_length(ch8Longest)
+
+# Number of words in longest sentence 
+nwords(ch8Longest)
+
+# Find shortest Sentence 
+ch8Shortest <- ch8SortedSentences[108]
+ch8Shortest
+
+# Length of shortest sentence 
+str_length(ch8Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch8Shortest)
+
+
+# Longest word
+# Extract words 
+x8DTM <- DocumentTermMatrix(x8)
+ch8Words <- x8DTM$dimnames$Terms
+ch8Words
+
+ch8NumWords <- length(x8DTM$dimnames$Terms)
+ch8NumWords 
+
+maxWordLength8 <- 0
+maxWordCh8 <- "max"
+
+
+for(i in 1:ch8NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch8Words[i]))
+  if((nchar(ch8Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch8Words[i])
+    maxWordCh8 <- ch8Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh8)
+
+# Chapter 9
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 9 
+ch9Lines <- read_lines("text/Chapter09.txt", skip = 0, n_max = -1L)
+ch9Lines
+# Convert text to sentences 
+ch9Sentences <- convert_text_to_sentences(ch9Lines)
+str(ch9Sentences)
+# Sort array by number of characters 
+ch9Sentences$numChar <- nchar(ch9Sentences)
+ch9Sentences$numChar
+ch9SortedSentences <- sentences[order(ch9Sentences$numChar)]
+# Find longest sentence 
+ch9Longest <-ch1SortedSentences[9]
+ch9Longest
+
+# Length of longest sentence
+str_length(ch9Longest)
+
+# Number of words in longest sentence 
+nwords(ch9Longest)
+
+# Find shortest Sentence 
+ch9Shortest <- ch9SortedSentences[108]
+ch9Shortest
+
+# Length of shortest sentence 
+str_length(ch9Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch9Shortest)
+
+
+# Longest word
+# Extract words 
+x9DTM <- DocumentTermMatrix(x9)
+ch9Words <- x9DTM$dimnames$Terms
+ch9Words
+
+ch9NumWords <- length(x9DTM$dimnames$Terms)
+ch9NumWords 
+
+maxWordLength9 <- 0
+maxWordCh9 <- "max"
+
+
+for(i in 1:ch9NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch9Words[i]))
+  if((nchar(ch9Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch9Words[i])
+    maxWordCh9 <- ch9Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh9)
+
+# Chapter 10
+# Longest Word 
+# Longest Sentence 
+# Get lines from Chapter 10 
+ch10Lines <- read_lines("text/Chapter10.txt", skip = 0, n_max = -1L)
+ch10Lines
+# Convert text to sentences 
+ch10Sentences <- convert_text_to_sentences(ch10Lines)
+str(ch10Sentences)
+# Sort array by number of characters 
+ch10Sentences$numChar <- nchar(ch10Sentences)
+ch10Sentences$numChar
+ch10SortedSentences <- sentences[order(ch10Sentences$numChar)]
+# Find longest sentence 
+ch10Longest <-ch1SortedSentences[1]
+ch10Longest
+
+# Length of longest sentence
+str_length(ch10Longest)
+
+# Number of words in longest sentence 
+nwords(ch10Longest)
+
+# Find shortest Sentence 
+ch10Shortest <- ch10SortedSentences[108]
+ch10Shortest
+
+# Length of shortest sentence 
+str_length(ch10Shortest)
+
+# Number of words in shortest sentence 
+nwords(ch10Shortest)
+
+
+# Longest word
+# Extract words 
+x10DTM <- DocumentTermMatrix(x10)
+ch10Words <- x10DTM$dimnames$Terms
+ch10Words
+
+ch10NumWords <- length(x10DTM$dimnames$Terms)
+ch10NumWords 
+
+maxWordLength10 <- 0
+maxWordCh10 <- "max"
+
+
+for(i in 1:ch10NumWords){
+  print(i)
+  sprintf("\n")
+  print("Length:")
+  print(nchar(ch10Words[i]))
+  if((nchar(ch10Words[i]) > maxWordLength)){
+    maxWordLength <- nchar(ch10Words[i])
+    maxWordCh10 <- ch10Words[i]
+  }
+}
+print(maxWordLength)
+print(maxWordCh10)
+
+# 1e. Use WordNet to mark the parts of speech for the first chapter for nouns and verbs having a length
+# of 5 or greater 
+
+# 1f. Analyze word frequency using functions from package zipfR 
+
+# 1g. Generate bigrams and trigrams for all words whose length is greater than 6 characters in Chapter 1.
+
+# 1h. Process the text from the data document using corpusTools, stringi, corpustools, quanted, 
+# and tidytext. Describe the methods you use, the results you get, and what you understand 
+# about the theme of the book.
+
+# 1i. By now, you should see that Data Science is an empirical science.
+# So, these packages provide tools that can give greater insight into the text. 
+# At a minimum, choose three (3) functions from each package and apply them to Chapter 1.
+
+
+
+
+
 

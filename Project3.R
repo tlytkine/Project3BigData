@@ -652,6 +652,7 @@ wordcloud(words = names(word10.freq),freq=word10.freq,min.freq=3,random.order=F,
 # 1d. Prior to removing the punctuation, find the longest word and longest sentences 
 # in each chapter. Print a table of the length of the shortest and longest sentences
 # in each chapter 
+
 # Chapter 1 
 # Get lines from Chapter 1 
 ch1Lines <- read_lines("text/Chapter01.txt", skip = 0, n_max = -1L)
@@ -659,7 +660,7 @@ ch1Lines <- read_lines("text/Chapter01.txt", skip = 0, n_max = -1L)
 ch1Sentences <- convert_text_to_sentences(ch1Lines)
 # Sort array by number of characters 
 ch1Sentences$numChar <- nchar(ch1Sentences)
-ch1SortedSentences <- sentences[order(ch1Sentences$numChar)]
+ch1SortedSentences <- ch1Sentences[order(-ch1Sentences$numChar)]
 ch1SortedSentences
 # Find longest sentence 
 ch1Longest <-ch1SortedSentences[1]
@@ -669,7 +670,8 @@ str_length(ch1Longest)
 # Number of words in longest sentence 
 nwords(ch1Longest)
 # Find shortest Sentence 
-ch1Shortest <- ch1SortedSentences[108]
+index1 <- length(ch1SortedSentences)
+ch1Shortest <- ch1SortedSentences[index1]
 ch1Shortest
 # Length of shortest sentence 
 str_length(ch1Shortest)
@@ -680,21 +682,17 @@ nwords(ch1Shortest)
 x1DTM <- DocumentTermMatrix(x1)
 ch1Words <- x1DTM$dimnames$Terms
 ch1NumWords <- length(x1DTM$dimnames$Terms)
-maxWordLength <- 0
+maxWordLength1 <- 0
 maxWordCh1 <- "max"
 
 
 for(i in 1:ch1NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch1Words[i]))
-  if((nchar(ch1Words[i]) > maxWordLength)){
-    maxWordLength <- nchar(ch1Words[i])
+  if((nchar(ch1Words[i]) > maxWordLength1)){
+    maxWordLength1 <- nchar(ch1Words[i])
     maxWordCh1 <- ch1Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength1)
 print(maxWordCh1)
 
 # Chapter 2
@@ -708,8 +706,11 @@ str(ch2Sentences)
 # Sort array by number of characters 
 ch2Sentences$numChar <- nchar(ch2Sentences)
 ch2Sentences$numChar
-ch2SortedSentences <- sentences[order(-ch2Sentences$numChar)]
+ch2SortedSentences <- ch2Sentences[order(-ch2Sentences$numChar)]
+ch2Sentences$numChar
+order(ch2Sentences$numChar)
 ch2SortedSentences
+index2 <- length(ch2SortedSentences)
 # Find longest sentence 
 ch2Longest <-ch2SortedSentences[1]
 ch2Longest
@@ -721,7 +722,7 @@ str_length(ch2Longest)
 nwords(ch2Longest)
 
 # Find shortest Sentence 
-ch2Shortest <- ch2SortedSentences[136]
+ch2Shortest <- ch2SortedSentences[index2]
 ch2Shortest
 
 # Length of shortest sentence 
@@ -745,10 +746,6 @@ maxWordCh2 <- "max"
 
 
 for(i in 1:ch2NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch2Words[i]))
   if((nchar(ch2Words[i]) > maxWordLength2)){
     maxWordLength2 <- nchar(ch2Words[i])
     maxWordCh2 <- ch2Words[i]
@@ -769,9 +766,9 @@ str(ch3Sentences)
 # Sort array by number of characters 
 ch3Sentences$numChar <- nchar(ch3Sentences)
 ch3Sentences$numChar
-ch3SortedSentences <- sentences[order(ch3Sentences$numChar)]
+ch3SortedSentences <- ch3Sentences[order(-ch3Sentences$numChar)]
 # Find longest sentence 
-ch3Longest <-ch1SortedSentences[1]
+ch3Longest <-ch3SortedSentences[1]
 ch3Longest
 
 # Length of longest sentence
@@ -780,8 +777,9 @@ str_length(ch3Longest)
 # Number of words in longest sentence 
 nwords(ch3Longest)
 
+index3 <- length(ch3SortedSentences)
 # Find shortest Sentence 
-ch3Shortest <- ch3SortedSentences[108]
+ch3Shortest <- ch3SortedSentences[index3]
 ch3Shortest
 
 # Length of shortest sentence 
@@ -805,17 +803,15 @@ maxWordCh3 <- "max"
 
 
 for(i in 1:ch3NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch3Words[i]))
-  if((nchar(ch3Words[i]) > maxWordLength)){
+  if((nchar(ch3Words[i]) > maxWordLength3)){
     maxWordLength <- nchar(ch3Words[i])
     maxWordCh3 <- ch3Words[i]
   }
 }
 print(maxWordLength)
 print(maxWordCh3)
+
+
 
 # Chapter 4
 # Longest Word 
@@ -829,9 +825,9 @@ str(ch4Sentences)
 # Sort array by number of characters 
 ch4Sentences$numChar <- nchar(ch4Sentences)
 ch4Sentences$numChar
-ch4SortedSentences <- sentences[order(ch4Sentences$numChar)]
+ch4SortedSentences <- ch4Sentences[order(-ch4Sentences$numChar)]
 # Find longest sentence 
-ch4Longest <-ch1SortedSentences[4]
+ch4Longest <-ch4SortedSentences[1]
 ch4Longest
 
 # Length of longest sentence
@@ -840,8 +836,12 @@ str_length(ch4Longest)
 # Number of words in longest sentence 
 nwords(ch4Longest)
 
+
+
+
 # Find shortest Sentence 
-ch4Shortest <- ch4SortedSentences[108]
+index4 <- length(ch4SortedSentences)
+ch4Shortest <- ch4SortedSentences[index4]
 ch4Shortest
 
 # Length of shortest sentence 
@@ -865,16 +865,12 @@ maxWordCh4 <- "max"
 
 
 for(i in 1:ch4NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch4Words[i]))
-  if((nchar(ch4Words[i]) > maxWordLength)){
+  if((nchar(ch4Words[i]) > maxWordLength4)){
     maxWordLength <- nchar(ch4Words[i])
     maxWordCh4 <- ch4Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength4)
 print(maxWordCh4)
 
 # Chapter 5
@@ -889,9 +885,9 @@ str(ch5Sentences)
 # Sort array by number of characters 
 ch5Sentences$numChar <- nchar(ch5Sentences)
 ch5Sentences$numChar
-ch5SortedSentences <- sentences[order(ch5Sentences$numChar)]
+ch5SortedSentences <- ch5Sentences[order(-ch5Sentences$numChar)]
 # Find longest sentence 
-ch5Longest <-ch1SortedSentences[5]
+ch5Longest <-ch5SortedSentences[1]
 ch5Longest
 
 # Length of longest sentence
@@ -900,8 +896,9 @@ str_length(ch5Longest)
 # Number of words in longest sentence 
 nwords(ch5Longest)
 
+index5 <- length(ch5SortedSentences)
 # Find shortest Sentence 
-ch5Shortest <- ch5SortedSentences[108]
+ch5Shortest <- ch5SortedSentences[index5]
 ch5Shortest
 
 # Length of shortest sentence 
@@ -925,12 +922,8 @@ maxWordCh5 <- "max"
 
 
 for(i in 1:ch5NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch5Words[i]))
-  if((nchar(ch5Words[i]) > maxWordLength)){
-    maxWordLength <- nchar(ch5Words[i])
+  if((nchar(ch5Words[i]) > maxWordLength5)){
+    maxWordLength5 <- nchar(ch5Words[i])
     maxWordCh5 <- ch5Words[i]
   }
 }
@@ -949,9 +942,9 @@ str(ch6Sentences)
 # Sort array by number of characters 
 ch6Sentences$numChar <- nchar(ch6Sentences)
 ch6Sentences$numChar
-ch6SortedSentences <- sentences[order(ch6Sentences$numChar)]
+ch6SortedSentences <- ch6Sentences[order(-ch6Sentences$numChar)]
 # Find longest sentence 
-ch6Longest <-ch1SortedSentences[6]
+ch6Longest <-ch6SortedSentences[1]
 ch6Longest
 
 # Length of longest sentence
@@ -960,8 +953,11 @@ str_length(ch6Longest)
 # Number of words in longest sentence 
 nwords(ch6Longest)
 
+
+index6 <- length(ch6SortedSentences)
+
 # Find shortest Sentence 
-ch6Shortest <- ch6SortedSentences[108]
+ch6Shortest <- ch6SortedSentences[index6]
 ch6Shortest
 
 # Length of shortest sentence 
@@ -985,16 +981,12 @@ maxWordCh6 <- "max"
 
 
 for(i in 1:ch6NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch6Words[i]))
-  if((nchar(ch6Words[i]) > maxWordLength)){
-    maxWordLength <- nchar(ch6Words[i])
+  if((nchar(ch6Words[i]) > maxWordLength6)){
+    maxWordLength6 <- nchar(ch6Words[i])
     maxWordCh6 <- ch6Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength6)
 print(maxWordCh6)
 
 # Chapter 7
@@ -1009,9 +1001,9 @@ str(ch7Sentences)
 # Sort array by number of characters 
 ch7Sentences$numChar <- nchar(ch7Sentences)
 ch7Sentences$numChar
-ch7SortedSentences <- sentences[order(ch7Sentences$numChar)]
+ch7SortedSentences <- ch7Sentences[order(-ch7Sentences$numChar)]
 # Find longest sentence 
-ch7Longest <-ch1SortedSentences[7]
+ch7Longest <-ch7SortedSentences[1]
 ch7Longest
 
 # Length of longest sentence
@@ -1020,8 +1012,10 @@ str_length(ch7Longest)
 # Number of words in longest sentence 
 nwords(ch7Longest)
 
+
 # Find shortest Sentence 
-ch7Shortest <- ch7SortedSentences[108]
+index7 <- length(ch7SortedSentences)
+ch7Shortest <- ch7SortedSentences[index7]
 ch7Shortest
 
 # Length of shortest sentence 
@@ -1045,16 +1039,12 @@ maxWordCh7 <- "max"
 
 
 for(i in 1:ch7NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch7Words[i]))
-  if((nchar(ch7Words[i]) > maxWordLength)){
-    maxWordLength <- nchar(ch7Words[i])
+  if((nchar(ch7Words[i]) > maxWordLength7)){
+    maxWordLength7 <- nchar(ch7Words[i])
     maxWordCh7 <- ch7Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength7)
 print(maxWordCh7)
 
 # Chapter 8
@@ -1069,9 +1059,9 @@ str(ch8Sentences)
 # Sort array by number of characters 
 ch8Sentences$numChar <- nchar(ch8Sentences)
 ch8Sentences$numChar
-ch8SortedSentences <- sentences[order(ch8Sentences$numChar)]
+ch8SortedSentences <- ch8Sentences[order(-ch8Sentences$numChar)]
 # Find longest sentence 
-ch8Longest <-ch1SortedSentences[8]
+ch8Longest <-ch1SortedSentences[1]
 ch8Longest
 
 # Length of longest sentence
@@ -1080,8 +1070,10 @@ str_length(ch8Longest)
 # Number of words in longest sentence 
 nwords(ch8Longest)
 
+
 # Find shortest Sentence 
-ch8Shortest <- ch8SortedSentences[108]
+index8 <- length(ch8SortedSentences)
+ch8Shortest <- ch8SortedSentences[index8]
 ch8Shortest
 
 # Length of shortest sentence 
@@ -1105,16 +1097,12 @@ maxWordCh8 <- "max"
 
 
 for(i in 1:ch8NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch8Words[i]))
-  if((nchar(ch8Words[i]) > maxWordLength)){
-    maxWordLength <- nchar(ch8Words[i])
+  if((nchar(ch8Words[i]) > maxWordLength8)){
+    maxWordLength8 <- nchar(ch8Words[i])
     maxWordCh8 <- ch8Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength8)
 print(maxWordCh8)
 
 # Chapter 9
@@ -1129,9 +1117,9 @@ str(ch9Sentences)
 # Sort array by number of characters 
 ch9Sentences$numChar <- nchar(ch9Sentences)
 ch9Sentences$numChar
-ch9SortedSentences <- sentences[order(ch9Sentences$numChar)]
+ch9SortedSentences <- ch9Sentences[order(-ch9Sentences$numChar)]
 # Find longest sentence 
-ch9Longest <-ch1SortedSentences[9]
+ch9Longest <-ch9SortedSentences[1]
 ch9Longest
 
 # Length of longest sentence
@@ -1141,7 +1129,8 @@ str_length(ch9Longest)
 nwords(ch9Longest)
 
 # Find shortest Sentence 
-ch9Shortest <- ch9SortedSentences[108]
+index9 <- length(ch9SortedSentences)
+ch9Shortest <- ch9SortedSentences[index9]
 ch9Shortest
 
 # Length of shortest sentence 
@@ -1165,16 +1154,12 @@ maxWordCh9 <- "max"
 
 
 for(i in 1:ch9NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch9Words[i]))
-  if((nchar(ch9Words[i]) > maxWordLength)){
-    maxWordLength <- nchar(ch9Words[i])
+  if((nchar(ch9Words[i]) > maxWordLength9)){
+    maxWordLength9 <- nchar(ch9Words[i])
     maxWordCh9 <- ch9Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength9)
 print(maxWordCh9)
 
 # Chapter 10
@@ -1189,9 +1174,9 @@ str(ch10Sentences)
 # Sort array by number of characters 
 ch10Sentences$numChar <- nchar(ch10Sentences)
 ch10Sentences$numChar
-ch10SortedSentences <- sentences[order(ch10Sentences$numChar)]
+ch10SortedSentences <- ch10Sentences[order(-ch10Sentences$numChar)]
 # Find longest sentence 
-ch10Longest <-ch1SortedSentences[1]
+ch10Longest <-ch10SortedSentences[1]
 ch10Longest
 
 # Length of longest sentence
@@ -1201,7 +1186,8 @@ str_length(ch10Longest)
 nwords(ch10Longest)
 
 # Find shortest Sentence 
-ch10Shortest <- ch10SortedSentences[108]
+index10 <- length(ch10SortedSentences)
+ch10Shortest <- ch10SortedSentences[index10]
 ch10Shortest
 
 # Length of shortest sentence 
@@ -1225,20 +1211,28 @@ maxWordCh10 <- "max"
 
 
 for(i in 1:ch10NumWords){
-  print(i)
-  sprintf("\n")
-  print("Length:")
-  print(nchar(ch10Words[i]))
-  if((nchar(ch10Words[i]) > maxWordLength)){
-    maxWordLength <- nchar(ch10Words[i])
+  if((nchar(ch10Words[i]) > maxWordLength10)){
+    maxWordLength10 <- nchar(ch10Words[i])
     maxWordCh10 <- ch10Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength10)
 print(maxWordCh10)
 
 # 1e. Use WordNet to mark the parts of speech for the first chapter for nouns and verbs having a length
 # of 5 or greater 
+chapter1Text <- toString(readLines("text/Chapter01.txt"))
+print(chapter1Text) 
+
+
+a2 <-annotate(text, list(Maxent_Sent_Token_Annotator(), Maxent_Word_Token_Annotator()))
+pos_tag_annotator <-Maxent_POS_Tag_Annotator()
+a3 <-annotate(text, Maxent_POS_Tag_Annotator(), a2)
+print(a3)
+a3w <-subset(a3, type == "word")
+tags <-sapply(a3w$features, '[[', "POS")
+print(tags)
+
 
 # 1f. Analyze word frequency using functions from package zipfR 
 

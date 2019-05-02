@@ -1221,18 +1221,23 @@ print(maxWordCh10)
 
 # 1e. Use WordNet to mark the parts of speech for the first chapter for nouns and verbs having a length
 # of 5 or greater 
+# pos: part of speech type, must be either "ADJECTIVE","ADVERB","NOUN",or"VERB"
+# Verb = VBP
+# Noun = NN 
 chapter1Text <- toString(readLines("text/Chapter01.txt"))
 print(chapter1Text) 
 
+test2 <-annotate(chapter1Text, list(Maxent_Sent_Token_Annotator(), Maxent_Word_Token_Annotator()))
 
-a2 <-annotate(text, list(Maxent_Sent_Token_Annotator(), Maxent_Word_Token_Annotator()))
-pos_tag_annotator <-Maxent_POS_Tag_Annotator()
-a3 <-annotate(text, Maxent_POS_Tag_Annotator(), a2)
-print(a3)
-a3w <-subset(a3, type == "word")
-tags <-sapply(a3w$features, '[[', "POS")
-print(tags)
-
+test3 <-annotate(chapter1Text, Maxent_POS_Tag_Annotator(), test2)
+print(test3)
+test3
+wordTest <-subset(test3, type == "word")
+str(wordTest$features)
+# Extract VBP and NN from above 
+wordTest$features
+wordTags <-sapply(wordTest$features, '[[', "POS")
+print(wordTags)
 
 # 1f. Analyze word frequency using functions from package zipfR 
 
@@ -1246,8 +1251,72 @@ print(tags)
 # So, these packages provide tools that can give greater insight into the text. 
 # At a minimum, choose three (3) functions from each package and apply them to Chapter 1.
 
+# textreuse
+# Function 1 
+# Function 2 
+# Function 3 
 
+# SnowballC
+# Function 1 
+# Function 2 
+# Function 3 
 
+# wordcloud
+# Function 1 
+# Function 2 
+# Function 3 
 
+# NLP
+# Function 1 
+# Function 2 
+# Function 3 
 
+# rJava
+# Function 1 
+# Function 2 
+# Function 3 
 
+# wordnet
+# Function 1 
+# Function 2 
+# Function 3 
+
+# tm
+# Function 1 
+# Function 2 
+# Function 3 
+
+# zipfR
+# Function 1 
+# Function 2 
+# Function 3 
+
+# quanteda
+# Function 1 
+# Function 2 
+# Function 3 
+
+# stringi
+# Function 1 
+# Function 2 
+# Function 3 
+
+# syuzhet
+# Function 1 
+# Function 2 
+# Function 3 
+
+# corpus
+# Function 1 
+# Function 2 
+# Function 3 
+
+# openNLP
+# Function 1 
+# Function 2 
+# Function 3 
+
+# stringr
+# Function 1 
+# Function 2 
+# Function 3 

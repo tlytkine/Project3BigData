@@ -1,3 +1,12 @@
+install.packages("textreuse")
+install.packages("rJava")
+install.packages("wordnet")
+install.packages("zipfR")
+install.packages("syuzhet")
+install.packages("corpus")
+install.packages("openNLP")
+install.packages("languageR")
+
 # Load required libraries 
 library(devtools)
 library(textreuse)
@@ -1270,22 +1279,93 @@ print(wordTags)
 
 # textreuse
 # Function 1 
+#dir <- system.file("text/", package = "textreuse")
+f <- c(chapter1)
+doc <- TextReuseTextDocument(file = f, meta = list(id = "ny1850"))
+print(doc)
+
 # Function 2 
+dir1 <- system.file("text/", package = "textreuse")
+corpusCh1Test <- TextReuseCorpus(dir = dir1, tokenizer = NULL)
+corpusCh1Test <- tokenize(corpusCh1Test, tokenize_ngrams)
+head(tokens(corpusCh1Test[[1]]))
+
 # Function 3 
+f <- c(chapter1)
+length(f)
+wordcount(f)
 
 # SnowballC
-# Function 1 
-# Function 2 
+# Function 1 #A character vector giving the names of the languages.
+getStemLanguages()
+wordStem
+
+# Function 2 #Get the stem of words
+wordStem(c(chapter1))
+# Test the supplied vocabulary
+for(lang in getStemLanguages()) {
+  load(system.file("words", paste0(lang, ".RData"), package="SnowballC"))
+  stopifnot(all(wordStem(voc[[1]], lang) == voc[[2]]))
+}
+stopifnot(is.na(wordStem(NA)))
+
 # Function 3 
+#only 2 functions in this package
 
 # wordcloud
-# Function 1 
-# Function 2 
-# Function 3 
+# Function 1 #comparison.cloud
+# Plot a cloud of words shared across documents
+if(require(tm)){
+  data(ch1)
+  corp <- ch1
+  corp <- tm_map(corp, removePunctuation)
+  corp <- tm_map(corp, content_transformer(tolower))
+  corp <- tm_map(corp, removeNumbers)
+  corp <- tm_map(corp, function(x)removeWords(x,stopwords()))
+  term.matrix <- TermDocumentMatrix(corp)
+  term.matrix <- as.matrix(term.matrix)
+  colnames(term.matrix) <- c("Chapter 1")
+  comparison.cloud(term.matrix,max.words=40,random.order=FALSE)
+  commonality.cloud(term.matrix,max.words=40,random.order=FALSE)
+}
+comparison.cloud
+
+# Function 2 #Text Plot
+# An x y plot of non-overlapping text
+#calculate standardized MDS coordinates
+dat <- sweep(ch1,2,colMeans(ch1))
+dat <- sweep(dat,2,sqrt(diag(var(dat))),"/")
+loc <- cmdscale(dist(dat))
+#plot with no overlap
+textplot(loc[,1],loc[,2],rownames(loc))
+#x limits sets x bounds of plot, and forces all words to be in bounds
+textplot(loc[,1],loc[,2],rownames(loc),xlim=c(-3.5,3.5))
+#compare to text (many states unreadable)
+plot(loc[,1],loc[,2],type="n")
+text(loc[,1],loc[,2],rownames(loc))
+
+# Function 3 # Word Layout
+# finds text plot layout coordinates such that no text overlaps
+#calculate standardized MDS coordinates
+dat1 <- sweep(ch1,2,colMeans(ch1))
+dat1 <- sweep(dat,2,sqrt(diag(var(dat1))),"/")
+loc <- cmdscale(dist(dat1))
+x <- loc[,1]
+y <- loc[,2]
+w <- rownames(loc)
+#plot with no overlap and all words visible
+plot(x,y,type="n",xlim=c(-3,3),ylim=c(-3,2))
+lay <- wordlayout(x,y,w,xlim=c(-3,3),ylim=c(-3,2))
+text(lay[,1]+.5*lay[,3],lay[,2]+.5*lay[,4],w)
 
 # NLP
-# Function 1 
+# Function 1 # annotate
+## Annotate sentence tokens.
+a1 <- annotate(ch1, sent_token_annotator)
+a1
+
 # Function 2 
+
 # Function 3 
 
 # rJava

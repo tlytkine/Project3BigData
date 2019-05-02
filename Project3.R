@@ -15,6 +15,7 @@ library(corpus)
 library(openNLP)
 library(readr)
 library(stringr)
+library(languageR)
 
 
 # Load text file (entire book)
@@ -1240,6 +1241,22 @@ wordTags <-sapply(wordTest$features, '[[', "POS")
 print(wordTags)
 
 # 1f. Analyze word frequency using functions from package zipfR 
+  # 1. Take your corpus and perform the cleansing operations on it as discussed in 
+  # class. You should end with just a sequence of words. This should be a
+  # data frame.
+
+  # 2. Convert it to a character vector of words 
+
+  # 3. Next, install the package "languageR" and also reads it documentation,
+  # languageR.pdf from a CRAN mirror 
+
+  # 4.languageR has a function - text2spc.fnc which takes the character vector
+  # of words and produces an spc object for zipfR. Based on the documentation, 
+  # it should have one entry for every word.
+
+  # 5. The V should be the number of distinct words in the spc object.
+
+  # 6. N should be the total number of words in the character vector
 
 # 1g. Generate bigrams and trigrams for all words whose length is greater than 6 characters in Chapter 1.
 
@@ -1320,3 +1337,9 @@ print(wordTags)
 # Function 1 
 # Function 2 
 # Function 3 
+
+# languageR
+# Function 1 
+# Function 2 
+# Function 3 
+

@@ -1504,18 +1504,42 @@ removeNumbers(clChapter1)
 # generate a term frequency vector
 termFreq(clChapter1)
 
-# zipfR
+# zipfR 
 # Function 1 
-# Function 2 
-# Function 3 
+summary(ch1)
+ch1 = text2spc.fnc(ch1)
+plot(ch1)
+
+# Function 2 #print.lnre
+#implementations of the print and summary methods for LNRE Models
+ch1 = text2spc.fnc(ch1)
+zm <- lnre("zm", ch1)
+zm
+
+# Function 3 # lnre.vgc
+# lnre.vgc computes expected vocabulary growth curves E[V (N)] according to a LNRE model,
+# returning an object of class vgc. Data points are returned for the specified values of N, optionally
+# including estimated variances and/or growth curves for the spectrum elements E[Vm(N)].
+zm.vgc <- lnre.vgc(zm,(1:100)*70, variances=TRUE)
+
 
 # quanteda
-# Function 1 
-# Function 2 
-# Function 3 
+# Function 1 # dfm
+# Construct a sparse document-feature matrix, from a character, corpus, tokens, or even other dfm
+# object.
+dfm(clChapter1)
+
+# Function 2 # tokens
+#Tokenize the texts from a character vector or from a corpus.
+clChapter1Tokens <- quanteda::tokens(clChapter1)
+clChapter1Tokens
+
+# Function 3 #
+# tokens_tolower and tokens_toupper convert the features of a tokens object and re-index the
+# types.
+toks <- tokens_tolower(toks)
 
 # stringi
-
 # Function 1 
 # count number of occurences of pattern in a string
 stri_count(clChapter1, fixed="the")
@@ -1602,8 +1626,22 @@ str_detect(clChapter1, "[aeiou]")
 # Function 3
 # remove vowels from words
 str_remove_all(clChapter1, "[aeiou]")
+
 # languageR
+# Function 1
+book.spc <- text2spc.fnc(wordDF$Words)
+book.spc
+
+# Function 2 #show class
+# A class for the analysis of word frequency distributions
+showClass("growth")
+
+# Function 3 
+ch1.spectrum = spectrum.fnc(ch1)
+head(ch1.spectrum)
+tail(ch1.spectrum)
+
+#tidytext
 # Function 1  
 # Function 2 
 # Function 3 
-

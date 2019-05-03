@@ -1241,28 +1241,67 @@ wordTags <-sapply(wordTest$features, '[[', "POS")
 print(wordTags)
 
 # 1f. Analyze word frequency using functions from package zipfR 
-  # 1. Take your corpus and perform the cleansing operations on it as discussed in 
-  # class. You should end with just a sequence of words. This should be a
-  # data frame.
 
-  # 2. Convert it to a character vector of words 
+# 1. Take your corpus and perform the cleansing operations on it as discussed in 
+# class. You should end with just a sequence of words. This should be a
+# data frame.
+# (Cleansing up there^^^^)
+cleanTDM <- TermDocumentMatrix(cleanCorpus)
+cleanTF <- termFreq(cleanTDM$dimnames$Terms)
 
-  # 3. Next, install the package "languageR" and also reads it documentation,
-  # languageR.pdf from a CRAN mirror 
+# Convert to data frame 
+words <- as.data.frame(cleanTDM$dimnames$Terms)
+freq <- as.data.frame(cleanTF)
+length(words)
+nrow(freq)
+nrow(words)
+words[1:4280,1]
+freq[1:4280,1]
+wordDF <- data.frame("Words" = words[1:4280,1], "Frequency" = freq[1:4280,1], stringsAsFactors = FALSE)
 
-  # 4.languageR has a function - text2spc.fnc which takes the character vector
-  # of words and produces an spc object for zipfR. Based on the documentation, 
-  # it should have one entry for every word.
+# Convert to character vector 
+wordDF$Words <- as.character(wordDF$Words)
+wordDF$Frequency <- as.character(wordDF$Frequency)
+is.character(wordDF$Words)
+is.character(wordDF$Frequency)
 
-  # 5. The V should be the number of distinct words in the spc object.
 
-  # 6. N should be the total number of words in the character vector
 
-# 1g. Generate bigrams and trigrams for all words whose length is greater than 6 characters in Chapter 1.
 
+
+#  Next, install the package "languageR" and also reads it documentation,
+# languageR.pdf from a CRAN mirror 
+# languageR has a function - text2spc.fnc which takes the character vector
+# of words and produces an spc object for zipfR. Based on the documentation, 
+# it should have one entry for every word.
+# The V should be the number of distinct words in the spc object.
+# N should be the total number of words in the character vector
+# Make object for zipfR
+book.spc <- text2spc.fnc(wordDF$Words)
+book.spc
+# Plot Word Frequency Spectrum 
+plot(book.spc)
+# Summary of book.spc 
+summary(book.spc)
+help(zipfR)
+# Sample Size, Vocabulary and Hapax Counts 
+N(book.spc)
+V(book.spc)
+Vm(book.spc,1)
+# Plot spc 
+plot(book.spc)
+plot(book.spc,log="x")
+
+# 1g. Generate bigrams and trigrams for all words 
+# whose length is greater than 6 characters in Chapter 1.
+
+
+
+  
 # 1h. Process the text from the data document using corpusTools, stringi, corpustools, quanted, 
 # and tidytext. Describe the methods you use, the results you get, and what you understand 
 # about the theme of the book.
+# Figure this out 
 
 # 1i. By now, you should see that Data Science is an empirical science.
 # So, these packages provide tools that can give greater insight into the text. 

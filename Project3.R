@@ -1498,19 +1498,51 @@ a1
 # Function 3 
 
 # stringi
+
 # Function 1 
+# count number of occurences of pattern in a string
+stri_count(clChapter1, fixed="the")
+
 # Function 2 
-# Function 3 
+# detecting char set and language
+stri_enc_detect(clChapter1)
+
+# Function 3
+# padding and wrapping strings
+cat(stri_pad(stri_wrap(clChapter1), side='both'), sep="\n")
 
 # syuzhet
-# Function 1 
-# Function 2 
-# Function 3 
+
+# Function 1
+# parse a string for new line characters
+get_tokens(clChapter1, "\n")
+
+# Function 2
+# interates over a vector of strings and returns sentiment values
+get_sentiment(clChapter1)
+
+# Function 3
+# parse a string into a vector of sentences
+get_sentences(clChapter1)
 
 # corpus
-# Function 1 
+
+# Function 1
+# tabulate term occurence statistics
+term_stats(clChapter1)
+
 # Function 2 
+# report descriptive statistics
+text_stats(clChapter1)
+
 # Function 3 
+# count the number of unique types
+text_ntype(clChapter1)
+text_ntype(clChapter1, collapse = TRUE)
+
+# get the type sets
+text_types(clChapter1)
+text_types(clChapter1, collapse = TRUE)
 
 # openNLP
 # Function 1 
@@ -1518,10 +1550,18 @@ a1
 # Function 3 
 
 # stringr
-# Function 1 
-# Function 2 
-# Function 3 
 
+# Function 1
+# padding a string
+str_pad(clChapter1, 25, "both")
+
+# Function 2
+# detect presence of vowels in words
+str_detect(clChapter1, "[aeiou]")
+
+# Function 3
+# remove vowels from words
+str_remove_all(clChapter1, "[aeiou]")
 # languageR
 # Function 1 
 # Function 2 

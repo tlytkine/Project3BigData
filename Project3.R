@@ -1,12 +1,3 @@
-install.packages("textreuse")
-install.packages("rJava")
-install.packages("wordnet")
-install.packages("zipfR")
-install.packages("syuzhet")
-install.packages("corpus")
-install.packages("openNLP")
-install.packages("languageR")
-
 # Load required libraries 
 library(devtools)
 library(textreuse)
@@ -25,7 +16,12 @@ library(openNLP)
 library(readr)
 library(stringr)
 library(languageR)
-
+library(RWeka)
+library(Rgraphviz)
+library(corpustools)
+library(readtext)
+library(topicmodels)
+library(spacyr)
 
 # Load text file (entire book)
 lines <- read_lines("DrJekyllAndMrHyde.txt", skip = 0, n_max = -1L)
@@ -1251,7 +1247,7 @@ print(wordTags)
 
 # 1f. Analyze word frequency using functions from package zipfR 
 
-# 1. Take your corpus and perform the cleansing operations on it as discussed in 
+# Take your corpus and perform the cleansing operations on it as discussed in 
 # class. You should end with just a sequence of words. This should be a
 # data frame.
 # (Cleansing up there^^^^)
@@ -1273,10 +1269,6 @@ wordDF$Words <- as.character(wordDF$Words)
 wordDF$Frequency <- as.character(wordDF$Frequency)
 is.character(wordDF$Words)
 is.character(wordDF$Frequency)
-
-
-
-
 
 #  Next, install the package "languageR" and also reads it documentation,
 # languageR.pdf from a CRAN mirror 
@@ -1304,13 +1296,85 @@ plot(book.spc,log="x")
 # 1g. Generate bigrams and trigrams for all words 
 # whose length is greater than 6 characters in Chapter 1.
 
+# Get all words whose length is greater than 6 characters from chapter 1 
+# Get VCorpus of chapter 1 
+
+ch1Corpus <- VCorpus(DirSource("text/chapter1/",ignore.case = TRUE,mode="text"))
+ch1Corpus <- tm_map(ch1Corpus,toSpace,"’")
+ch1Corpus <- tm_map(ch1Corpus,toSpace,"”")
+ch1Corpus <- tm_map(ch1Corpus,toSpace,"“")
+ch1Corpus <- tm_map(ch1Corpus,toSpace," a ")
 
 
-  
-# 1h. Process the text from the data document using corpusTools, stringi, corpustools, quanted, 
+# Biggram tokenizer 
+BigramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 2, max = 2))
+bigramTDM <- TermDocumentMatrix(ch1Corpus, control = list(tokenize = BigramTokenizer, wordlengths=c(6,Inf)))
+inspect(bigramTDM)
+
+
+plot(bigramTDM, terms = findFreqTerms(bigramTDM, lowfreq = 2)[1:4], corThreshold = 0.75)
+
+# Trigram tokenizer 
+TrigramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 3, max = 3))
+trigramTDM <- TermDocumentMatrix(ch1Corpus, control = list(tokenize = TrigramTokenizer, wordlengths=c(6,Inf)))
+inspect(trigramTDM)
+
+plot(trigramTDM, terms = findFreqTerms(trigramTDM, lowfreq = 2)[1:2], corThreshold = 0.2)
+
+
+# 1h. Process the text from the data document using corpustools, stringi, quanteda, 
 # and tidytext. Describe the methods you use, the results you get, and what you understand 
 # about the theme of the book.
-# Figure this out 
+
+# corpustools 
+
+
+
+# Import data document using read_lines 
+dataDoc <- toString(read_lines("DrJekyllAndMrHyde.txt", skip = 0, n_max = -1L))
+rt <- readtext("text/*.txt",docvarsfrom="filepaths")
+rt
+# Stringi 
+# Transform to lower case 
+dataDoc <- stri_trans_tolower(dataDoc)
+# Remove tags 
+dataDoc <- stri_replace_all(dataDoc,"",regex = "<.*?>")
+# Strip surrounding white space 
+dataDoc <- str_trim(dataDoc)
+# Reduce repeated whitespace inside string 
+dataDoc <- str_squish(dataDoc)
+dataDoc
+
+# Quanteda 
+# Tokenization
+toks <- quanteda::tokens(dataDoc)
+# Convert to lower case 
+toks <- tokens_tolower(toks)
+# Remove stopwords 
+sw <- stopwords("english")
+head(sw)
+tokens_remove(toks,sw)
+
+fulltext <- corpus(rt)                              
+dtm <- dfm(fulltext, tolower = TRUE, stem = TRUE,  
+           remove_punct = TRUE,remove = stopwords("english")) 
+dtm@docvars
+dtm@Dimnames
+# Document Frequency
+doc_freq <- docfreq(dtm) 
+doc_freq
+# Terms with frequency >= 6
+dtm6 <- dtm[, doc_freq >= 6]
+# TF-IDF
+dtm1 <- dfm_weight(dtm, "tfidf")  
+dfm_tfidf(dtm)
+
+# tidytext 
+# Each variable must have its own column 
+# Each observation must have its own row 
+# Each value must have its own cell 
+
+
 
 # 1i. By now, you should see that Data Science is an empirical science.
 # So, these packages provide tools that can give greater insight into the text. 
@@ -1408,6 +1472,7 @@ a1
 # Function 3 
 
 # rJava
+
 # Function 1 
 # Function 2 
 # Function 3 

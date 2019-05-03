@@ -1491,8 +1491,18 @@ parse_IETF_language_tag("ch1")
 
 # tm
 # Function 1 
-# Function 2 
+# visualize correlations between terms of a term-document matrix
+fitCH1 <- hclust(ch1Dist, method="ward.D2")
+fitCH1
+plot(fitCH1)
+
+# Function 2
+# remove numbers from a character vector or text document
+removeNumbers(clChapter1)
+
 # Function 3 
+# generate a term frequency vector
+termFreq(clChapter1)
 
 # zipfR
 # Function 1 

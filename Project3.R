@@ -1,3 +1,6 @@
+install.packages("rJava")
+install.packages("openNLP")
+install.packages("RWeka")
 # Load required libraries 
 library(devtools)
 library(textreuse)
@@ -1382,10 +1385,10 @@ dfm_tfidf(dtm)
 
 # textreuse
 # Function 1 
-#dir <- system.file("text/", package = "textreuse")
-f <- c(chapter1)
-doc <- TextReuseTextDocument(file = f, meta = list(id = "ny1850"))
-print(doc)
+# Biggram tokenizer 
+BigramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 2, max = 2))
+bigramTDM <- TermDocumentMatrix(ch1Corpus, control = list(tokenize = BigramTokenizer, wordlengths=c(6,Inf)))
+inspect(bigramTDM)
 
 # Function 2 
 dir1 <- system.file("text/", package = "textreuse")
@@ -1467,12 +1470,16 @@ text(lay[,1]+.5*lay[,3],lay[,2]+.5*lay[,4],w)
 a1 <- annotate(ch1, sent_token_annotator)
 a1
 
-# Function 2 
+# Function 2 # features
+# Conveniently extract features from annotations and annotated plain text documents.
+x <- features(ch1, "word")
 
-# Function 3 
+# Function 3 # language
+# Extract language, script, region and variant subtags from IETF language tags.
+parse_IETF_language_tag("ch1")
+
 
 # rJava
-
 # Function 1 
 # Function 2 
 # Function 3 
@@ -1512,7 +1519,6 @@ stri_enc_detect(clChapter1)
 cat(stri_pad(stri_wrap(clChapter1), side='both'), sep="\n")
 
 # syuzhet
-
 # Function 1
 # parse a string for new line characters
 get_tokens(clChapter1, "\n")
@@ -1526,7 +1532,6 @@ get_sentiment(clChapter1)
 get_sentences(clChapter1)
 
 # corpus
-
 # Function 1
 # tabulate term occurence statistics
 term_stats(clChapter1)
@@ -1545,12 +1550,37 @@ text_types(clChapter1)
 text_types(clChapter1, collapse = TRUE)
 
 # openNLP
-# Function 1 
-# Function 2 
-# Function 3 
+# Function 1 # Maxent_Sent_Token_Annotator
+convert_text_to_sentences <- function(text, lang = "en") {
+  # Function to compute sentence annotations using the Apache OpenNLP Maxent sentence detector employing the default model for language 'en'. 
+  sentence_token_annotator <- Maxent_Sent_Token_Annotator(language = lang)
+  
+  # Convert text to class String from package NLP
+  text <- as.String(text)
+  
+  # Sentence boundaries in text
+  sentence.boundaries <- annotate(text, sentence_token_annotator)
+  
+  # Extract sentences
+  sentences <- text[sentence.boundaries]
+  
+  # return sentences
+  return(sentences)
+}
+
+# Function 2 # Maxent_Sent_Token_Annotator
+#Generate an annotator which computes word token annotations using the Apache OpenNLP Maxent
+# tokenizer.
+test2 <-annotate(chapter1Text, list(Maxent_Sent_Token_Annotator(), Maxent_Word_Token_Annotator()))
+
+# Function 3 #Maxent_POS_Tag_Annotator
+# Generate an annotator which computes POS tag annotations using the Apache OpenNLP Maxent
+# Part of Speech tagger.
+test3 <-annotate(chapter1Text, Maxent_POS_Tag_Annotator(), test2)
+print(test3)
+test3
 
 # stringr
-
 # Function 1
 # padding a string
 str_pad(clChapter1, 25, "both")
@@ -1563,7 +1593,7 @@ str_detect(clChapter1, "[aeiou]")
 # remove vowels from words
 str_remove_all(clChapter1, "[aeiou]")
 # languageR
-# Function 1 
+# Function 1  
 # Function 2 
 # Function 3 
 

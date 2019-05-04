@@ -1647,6 +1647,12 @@ head(ch1.spectrum)
 tail(ch1.spectrum)
 
 #tidytext
-# Function 1  
+# Function 1
+# sentiment lexicons from four sources
+sentiments
 # Function 2 
+# english negators, modals, adverbs
+nma_words
 # Function 3 
+# lexicons for English stop words
+stop_words

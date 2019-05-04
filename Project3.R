@@ -4,8 +4,6 @@ library(textreuse)
 library(SnowballC)
 library(wordcloud)
 library(NLP)
-library(rJava)
-library(wordnet)
 library(tm)
 library(zipfR)
 library(quanteda)
@@ -1482,6 +1480,7 @@ x <- features(ch1, "word")
 # Extract language, script, region and variant subtags from IETF language tags.
 parse_IETF_language_tag("ch1")
 
+
 # tm
 # Function 1 
 # visualize correlations between terms of a term-document matrix
@@ -1530,7 +1529,7 @@ clChapter1Tokens
 # Function 3 #
 # tokens_tolower and tokens_toupper convert the features of a tokens object and re-index the
 # types.
-toks <- tokens_tolower(toks)
+toks <- tokens_tolower(clChapter1Tokens)
 
 # stringi
 # Function 1 
@@ -1603,7 +1602,7 @@ test2 <-annotate(chapter1Text, list(Maxent_Sent_Token_Annotator(), Maxent_Word_T
 # Function 3 #Maxent_POS_Tag_Annotator
 # Generate an annotator which computes POS tag annotations using the Apache OpenNLP Maxent
 # Part of Speech tagger.
-test3 <-annotate(chapter1Text, Maxent_POS_Tag_Annotator(), test2)
+test3 <-annotate(ch1Corpus, Maxent_POS_Tag_Annotator(), test2)
 print(test3)
 test3
 
@@ -1621,7 +1620,8 @@ str_detect(clChapter1, "[aeiou]")
 str_remove_all(clChapter1, "[aeiou]")
 
 # languageR
-# Function 1
+# Function 1 text2spc.fnc
+#This function takes a text in the form of a character vector as input, and outputs a #frequency spectrum object as defined in the zipfR package.
 book.spc <- text2spc.fnc(wordDF$Words)
 book.spc
 
@@ -1629,10 +1629,9 @@ book.spc
 # A class for the analysis of word frequency distributions
 showClass("growth")
 
-# Function 3 
+# Function 3 #specturm.fnc
+#This function creates a frequency spectrum for a text in character vector form
 ch1.spectrum = spectrum.fnc(ch1)
-head(ch1.spectrum)
-tail(ch1.spectrum)
 
 #tidytext
 # Function 1
@@ -1644,3 +1643,4 @@ nma_words
 # Function 3 
 # lexicons for English stop words
 stop_words
+

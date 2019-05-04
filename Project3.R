@@ -22,6 +22,7 @@ library(corpustools)
 library(readtext)
 library(topicmodels)
 library(spacyr)
+library(tidytext)
 
 # Load text file (entire book)
 lines <- read_lines("DrJekyllAndMrHyde.txt", skip = 0, n_max = -1L)
@@ -197,11 +198,6 @@ sparseTDM
 # Finding Informative Words 
 inspect(chapter1)
 
-# Exercise for students: given the list of interesting words in an article, determine how to 
-# find the position of each word in the original article,
-# Then, determine how to compute the distance between each pair of words. (distMatrix)
-
-# FIGURE OUT ABOVE 
 # Clustering Terms via Dendrogram 
 # fit <- hclust(distMatrix, method = "ward.D2")
 # plot(fit)
@@ -1203,8 +1199,16 @@ print(maxWordCh10)
 # 1e. Use WordNet to mark the parts of speech for the first chapter for nouns and verbs having a length of 5 or greater pos: 
 # part of speech type, must be either "ADJECTIVE","ADVERB","NOUN",or"VERB" Verb = VBP Noun = NN  Uses the annotate function from 
 # the NLP package Uses the Maxent_Sent_Token_Annotator() & Maxent_Word_Token_Annotator()These functions in combination produce 
-# a list of tokens for the sentences and words from Chapter 1
-# Get chapter 1 text 
+# a list of tokens for the sentences and words from Chapter 1, Get chapter 1 text 
+# Part of Speech Token Annotator 
+PTA <- Maxent_POS_Tag_Annotator(language="en")
+PTA
+# Sentence Token Annotator 
+STA <- Maxent_Sent_Token_Annotator(language="en")
+STA
+# Word Token Annotator 
+WTA <- Maxent_Word_Token_Annotator(language="en")
+WTA
 chapter1Text <- readLines("text/Chapter01.txt")
 # Convert it to a string 
 chapter1Text <- as.String(chapter1Text)
@@ -1212,17 +1216,11 @@ chapter1Text <- as.String(chapter1Text)
 is.String(chapter1Text)
 # See whats there 
 print(chapter1Text) 
-# Sentence Token Annotator 
-STA <- Maxent_Sent_Token_Annotator(language="en")
-STA
 # Compute sentence annotations 
 s1 <- annotate(chapter1Text,STA)
 s1
 # Extract sentences 
 sentVar <- chapter1Text[s1]
-# Word Token Annotator 
-WTA <- Maxent_Word_Token_Annotator(language="en")
-WTA
 # Compute word annotations 
 w1 <- annotate(chapter1Text, WTA, s1)
 w1
@@ -1266,10 +1264,10 @@ numVerbsFinal # 9 verbs
 # Take your corpus and perform the cleansing operations on it as discussed in 
 # class. You should end with just a sequence of words. This should be a
 # data frame.
-# (Cleansing up there^^^^)
 cleanTDM <- TermDocumentMatrix(cleanCorpus)
-cleanTF <- termFreq(cleanTDM$dimnames$Terms)
-
+cleanTDM
+cleanTF <- colSums(as.matrix(cleanDTM))
+cleanTF
 # Convert to data frame 
 words <- as.data.frame(cleanTDM$dimnames$Terms)
 freq <- as.data.frame(cleanTF)
@@ -1279,33 +1277,21 @@ nrow(words)
 words[1:4280,1]
 freq[1:4280,1]
 wordDF <- data.frame("Words" = words[1:4280,1], "Frequency" = freq[1:4280,1], stringsAsFactors = FALSE)
-
 # Convert to character vector 
 wordDF$Words <- as.character(wordDF$Words)
-wordDF$Frequency <- as.character(wordDF$Frequency)
 is.character(wordDF$Words)
-is.character(wordDF$Frequency)
-
-#  Next, install the package "languageR" and also reads it documentation,
-# languageR.pdf from a CRAN mirror 
-# languageR has a function - text2spc.fnc which takes the character vector
-# of words and produces an spc object for zipfR. Based on the documentation, 
-# it should have one entry for every word.
-# The V should be the number of distinct words in the spc object.
-# N should be the total number of words in the character vector
-# Make object for zipfR
+str(wordDF)
+str(wordDF$Words)
+# use text2spc.fnc() from zipFR 
 book.spc <- text2spc.fnc(wordDF$Words)
 book.spc
-# Plot Word Frequency Spectrum 
-plot(book.spc)
 # Summary of book.spc 
 summary(book.spc)
 # Sample Size, Vocabulary and Hapax Counts 
 N(book.spc)
 V(book.spc)
 Vm(book.spc,1)
-# Plot spc 
-plot(book.spc)
+# Plot Word Frequency Spectrum on a logarithm scale with respect to x 
 plot(book.spc,log="x")
 
 # 1g. Generate bigrams and trigrams for all words 
@@ -1313,12 +1299,14 @@ plot(book.spc,log="x")
 
 # Get all words whose length is greater than 6 characters from chapter 1 
 # Get VCorpus of chapter 1 
-
 ch1Corpus <- VCorpus(DirSource("text/chapter1/",ignore.case = TRUE,mode="text"))
 ch1Corpus <- tm_map(ch1Corpus,toSpace,"’")
 ch1Corpus <- tm_map(ch1Corpus,toSpace,"”")
 ch1Corpus <- tm_map(ch1Corpus,toSpace,"“")
 ch1Corpus <- tm_map(ch1Corpus,toSpace," a ")
+
+
+# stopwords("en")
 
 
 # Biggram tokenizer 
@@ -1342,7 +1330,6 @@ plot(trigramTDM, terms = findFreqTerms(trigramTDM, lowfreq = 2)[1:4], corThresho
 # about the theme of the book.
 # tidytext: Each variable must have its own column, Each observation must have its own row, Each value must have its own cell 
 
-
 # Import data document using read_lines 
 dataDoc <- toString(read_lines("DrJekyllAndMrHyde.txt", skip = 0, n_max = -1L))
 rt <- readtext("text/*.txt",docvarsfrom="filepaths")
@@ -1357,7 +1344,7 @@ dataDoc <- str_trim(dataDoc)
 # Reduce repeated whitespace inside string 
 dataDoc <- str_squish(dataDoc)
 dataDoc
-
+library(dplyr)
 # Quanteda 
 # Tokenization
 toks <- quanteda::tokens(dataDoc)
@@ -1376,11 +1363,23 @@ dtm@Dimnames
 # Document Frequency
 doc_freq <- docfreq(dtm) 
 doc_freq
+hist(doc_freq)
 # Terms with frequency >= 6
 dtm6 <- dtm[, doc_freq >= 6]
 # TF-IDF
 dtm1 <- dfm_weight(dtm, "tfidf")  
 dfm_tfidf(dtm)
+dataDoc
+# Extract words 
+wrds <- dtm@Dimnames
+wrds$features
+str(wrds$features)
+wrds$features 
+# Get nrc values 
+get_nrc_values(wrds$features)
+# Explore Corpus Term Frequency Characteristics 
+Zipf_plot(cleanTDM)
+
 
 
 
@@ -1482,17 +1481,6 @@ x <- features(ch1, "word")
 # Function 3 # language
 # Extract language, script, region and variant subtags from IETF language tags.
 parse_IETF_language_tag("ch1")
-
-
-# rJava
-# Function 1 
-# Function 2 
-# Function 3 
-
-# wordnet
-# Function 1 
-# Function 2 
-# Function 3 
 
 # tm
 # Function 1 

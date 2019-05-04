@@ -1,6 +1,3 @@
-install.packages("rJava")
-install.packages("openNLP")
-install.packages("RWeka")
 # Load required libraries 
 library(devtools)
 library(textreuse)
@@ -28,12 +25,42 @@ library(spacyr)
 
 # Load text file (entire book)
 lines <- read_lines("DrJekyllAndMrHyde.txt", skip = 0, n_max = -1L)
-lines
-# Check numrows
-nrow(lines)
+# Function to convert text to sentences 
+convert_text_to_sentences <- function(text, lang = "en") {
+  # Function to compute sentence annotations 
+  sentence_token_annotator <- Maxent_Sent_Token_Annotator(language = lang)
+  # Convert text to class String from package NLP
+  text <- as.String(text)
+  # Sentence boundaries in text
+  sentence.boundaries <- annotate(text, sentence_token_annotator)
+  # Extract sentences
+  sentences <- text[sentence.boundaries]
+  # return sentences
+  return(sentences)
+}
+# Function to count number of words 
+nwords <- function(string, pseudo=F){
+  ifelse( pseudo, 
+          pattern <- "\\S+", 
+          pattern <- "[[:alpha:]]+" 
+  )
+  str_count(string, pattern)
+}
+# Convert book text to sentence using function above
+sentences <- convert_text_to_sentences(lines)
+# Sort array by number of characters 
+sentences$numChar <- nchar(sentences)
+sortedSentences <- sentences[order(-sentences$numChar)]
+# Find 10 longest sentences
+tenLongest <- sortedSentences[1:10]
+tenLongest <- tenLongest[order(nwords(tenLongest))]
+tenLongest
 
-# Check head
-head(lines)
+# Find number of words in each sentence
+for(i in 1:10){ 
+  print(nwords(tenLongest[i]))
+  sprintf("\n")
+}
 
 # Create VCorpus of book with chapters separated out 
 bookCorpus <- VCorpus(DirSource("text/",ignore.case = TRUE,mode="text"))
@@ -44,59 +71,6 @@ inspect(bookCorpus)
 
 # Check structure of chapter corpus
 str(bookCorpus)
-
-# Function to convert text to sentences 
-convert_text_to_sentences <- function(text, lang = "en") {
-  # Function to compute sentence annotations using the Apache OpenNLP Maxent sentence detector employing the default model for language 'en'. 
-  sentence_token_annotator <- Maxent_Sent_Token_Annotator(language = lang)
-  
-  # Convert text to class String from package NLP
-  text <- as.String(text)
-  
-  # Sentence boundaries in text
-  sentence.boundaries <- annotate(text, sentence_token_annotator)
-  
-  # Extract sentences
-  sentences <- text[sentence.boundaries]
-  
-  # return sentences
-  return(sentences)
-}
-sentences <- convert_text_to_sentences(lines)
-str(sentences)
-sentences[1]
-summary(sentences)
-str_length(sentences[2])
-
-# Sort array by number of characters 
-sentences$numChar <- nchar(sentences)
-sentences$numChar
-sortedSentences <- sentences[order(-sentences$numChar)]
-
-# Find 10 longest sentences
-tenLongest <- sortedSentences[1:10]
-tenLongest
-
-tenLongest <- tenLongest[order(nwords(tenLongest))]
-tenLongest
-
-
-
-# Function to count number of words 
-nwords <- function(string, pseudo=F){
-  ifelse( pseudo, 
-          pattern <- "\\S+", 
-          pattern <- "[[:alpha:]]+" 
-  )
-  str_count(string, pattern)
-}
-
-# Find number of words in each sentence (add to report)
-for(i in 1:10){ 
-  print(nwords(tenLongest[i]))
-  sprintf("\n")
-}
-
 
 # Extract book from corpus 
 intro <- bookCorpus[1]
@@ -111,11 +85,6 @@ chapter8 <- bookCorpus[9]
 chapter9 <- bookCorpus[10]
 chapter10 <- bookCorpus[11]
 end <- bookCorpus[12]
-
-
-
-
-
 
 
 # Create document term matrix for bookCorpus (rows are documents, terms are words)
@@ -696,7 +665,7 @@ maxWordCh1 <- "max"
 
 
 for(i in 1:ch1NumWords){
-  if((nchar(ch1Words[i]) > maxWordLength1)){
+  if((nchar(ch1Words[i]) > maxWordLength1) && (nchar(ch1Words[i]) < 19)){
     maxWordLength1 <- nchar(ch1Words[i])
     maxWordCh1 <- ch1Words[i]
   }
@@ -811,14 +780,17 @@ maxWordLength3 <- 0
 maxWordCh3 <- "max"
 
 
+
 for(i in 1:ch3NumWords){
   if((nchar(ch3Words[i]) > maxWordLength3)){
-    maxWordLength <- nchar(ch3Words[i])
+    maxWordLength3 <- nchar(ch3Words[i])
     maxWordCh3 <- ch3Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength3)
 print(maxWordCh3)
+
+
 
 
 
@@ -875,7 +847,7 @@ maxWordCh4 <- "max"
 
 for(i in 1:ch4NumWords){
   if((nchar(ch4Words[i]) > maxWordLength4)){
-    maxWordLength <- nchar(ch4Words[i])
+    maxWordLength4 <- nchar(ch4Words[i])
     maxWordCh4 <- ch4Words[i]
   }
 }
@@ -936,7 +908,7 @@ for(i in 1:ch5NumWords){
     maxWordCh5 <- ch5Words[i]
   }
 }
-print(maxWordLength)
+print(maxWordLength5)
 print(maxWordCh5)
 
 # Chapter 6
@@ -1070,7 +1042,7 @@ ch8Sentences$numChar <- nchar(ch8Sentences)
 ch8Sentences$numChar
 ch8SortedSentences <- ch8Sentences[order(-ch8Sentences$numChar)]
 # Find longest sentence 
-ch8Longest <-ch1SortedSentences[1]
+ch8Longest <-ch8SortedSentences[1]
 ch8Longest
 
 # Length of longest sentence
@@ -1228,28 +1200,69 @@ for(i in 1:ch10NumWords){
 print(maxWordLength10)
 print(maxWordCh10)
 
-# 1e. Use WordNet to mark the parts of speech for the first chapter for nouns and verbs having a length
-# of 5 or greater 
-# pos: part of speech type, must be either "ADJECTIVE","ADVERB","NOUN",or"VERB"
-# Verb = VBP
-# Noun = NN 
-chapter1Text <- toString(readLines("text/Chapter01.txt"))
+# 1e. Use WordNet to mark the parts of speech for the first chapter for nouns and verbs having a length of 5 or greater pos: 
+# part of speech type, must be either "ADJECTIVE","ADVERB","NOUN",or"VERB" Verb = VBP Noun = NN  Uses the annotate function from 
+# the NLP package Uses the Maxent_Sent_Token_Annotator() & Maxent_Word_Token_Annotator()These functions in combination produce 
+# a list of tokens for the sentences and words from Chapter 1
+# Get chapter 1 text 
+chapter1Text <- readLines("text/Chapter01.txt")
+# Convert it to a string 
+chapter1Text <- as.String(chapter1Text)
+# See if it worked 
+is.String(chapter1Text)
+# See whats there 
 print(chapter1Text) 
+# Sentence Token Annotator 
+STA <- Maxent_Sent_Token_Annotator(language="en")
+STA
+# Compute sentence annotations 
+s1 <- annotate(chapter1Text,STA)
+s1
+# Extract sentences 
+sentVar <- chapter1Text[s1]
+# Word Token Annotator 
+WTA <- Maxent_Word_Token_Annotator(language="en")
+WTA
+# Compute word annotations 
+w1 <- annotate(chapter1Text, WTA, s1)
+w1
+# Extract words 
+wordVar <- chapter1Text[w1]
+wordVar
+# Get words of length greater than or equal to 5 
+wordVar5 <- subset(wordVar, nchar(wordVar) >= 5)
+wordVar5
+# Convert back to string 
+s2 <- as.String(wordVar5)
+s2
+# Compute sentence annotations 
+s3 <- annotate(s2,STA)
+# Compute word annotations 
+w2 <- annotate(s3, WTA, s3)
+# Compute part of speech annotations 
+pos3 <-annotate(s2, PTA, w2)
+# Get words 
+pos4 <- subset(pos3,type=="word")
+str(pos4$features)
+# Get word tags 
+wordTagsFinal <-sapply(pos4$features, '[[', "POS")
+str(wordTagsFinal)
+# Get nouns 
+nounsFinal <- wordTagsFinal[wordTagsFinal=="NN"]
+print(nounsFinal)
+numNounsFinal <- length(numFinal)
+numNounsFinal # 451 nouns
+# Get verbs 
+verbsFinal <- wordTagsFinal[wordTagsFinal=="VBP"]
+print(verbsFinal)
+numVerbsFinal <- length(verbsFinal)
+numVerbsFinal # 9 verbs 
 
-test2 <-annotate(chapter1Text, list(Maxent_Sent_Token_Annotator(), Maxent_Word_Token_Annotator()))
 
-test3 <-annotate(chapter1Text, Maxent_POS_Tag_Annotator(), test2)
-print(test3)
-test3
-wordTest <-subset(test3, type == "word")
-str(wordTest$features)
-# Extract VBP and NN from above 
-wordTest$features
-wordTags <-sapply(wordTest$features, '[[', "POS")
-print(wordTags)
+
+
 
 # 1f. Analyze word frequency using functions from package zipfR 
-
 # Take your corpus and perform the cleansing operations on it as discussed in 
 # class. You should end with just a sequence of words. This should be a
 # data frame.
@@ -1287,7 +1300,6 @@ book.spc
 plot(book.spc)
 # Summary of book.spc 
 summary(book.spc)
-help(zipfR)
 # Sample Size, Vocabulary and Hapax Counts 
 N(book.spc)
 V(book.spc)
@@ -1322,15 +1334,13 @@ TrigramTokenizer <- function(x) NGramTokenizer(x, Weka_control(min = 3, max = 3)
 trigramTDM <- TermDocumentMatrix(ch1Corpus, control = list(tokenize = TrigramTokenizer, wordlengths=c(6,Inf)))
 inspect(trigramTDM)
 
-plot(trigramTDM, terms = findFreqTerms(trigramTDM, lowfreq = 2)[1:2], corThreshold = 0.2)
+plot(trigramTDM, terms = findFreqTerms(trigramTDM, lowfreq = 2)[1:4], corThreshold = 0.2)
 
 
 # 1h. Process the text from the data document using corpustools, stringi, quanteda, 
 # and tidytext. Describe the methods you use, the results you get, and what you understand 
 # about the theme of the book.
-
-# corpustools 
-
+# tidytext: Each variable must have its own column, Each observation must have its own row, Each value must have its own cell 
 
 
 # Import data document using read_lines 
@@ -1371,11 +1381,6 @@ dtm6 <- dtm[, doc_freq >= 6]
 # TF-IDF
 dtm1 <- dfm_weight(dtm, "tfidf")  
 dfm_tfidf(dtm)
-
-# tidytext 
-# Each variable must have its own column 
-# Each observation must have its own row 
-# Each value must have its own cell 
 
 
 
